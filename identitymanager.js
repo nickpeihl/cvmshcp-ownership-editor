@@ -9,7 +9,7 @@ var map, cred = "esri_jsapi_id_manager_data"; // cookie/local storage name
 
 
 function init() {
-    esri.config.defaults.io.proxyUrl = "https://cvag01.mojavedata.gov/ownershipeditor/proxy.ashx";
+    esri.config.defaults.io.proxyUrl = "../proxy_net/proxy.ashx";
     // store credentials/serverInfos before the page unloads
     dojo.addOnUnload(storeCredentials);
     // look for credentials in local storage
