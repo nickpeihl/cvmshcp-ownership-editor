@@ -1,0 +1,6 @@
+* About
+This web application uses Esri's ArcGIS Javascript API v3.0 for making edits to the attributes of the Ownership layer in the Coachella Valley Multiple Species Habitat Conservation Plan (CVMSHCP).
+* Tasks
+** TODO Fix 'Invalid Url' problem on FeatureServer layer when clicking on a parcel.
+* Notes
+* Sources
