@@ -9,7 +9,7 @@ var map, cred = "esri_jsapi_id_manager_data"; // cookie/local storage name
 
 
 function init() {
-    esri.config.defaults.io.proxyUrl = "../proxy_net/proxy.ashx";
+    esri.config.defaults.io.proxyUrl = "https://cvag01.mojavedata.gov/proxy_net/proxy.ashx";
     // store credentials/serverInfos before the page unloads
     dojo.addOnUnload(storeCredentials);
     // look for credentials in local storage
@@ -98,13 +98,13 @@ function init() {
 
 function initSelectToolbar(results) {
     
-    var ownershipFieldsFL = results[0].layer;
+    var ownershipFL = results[0].layer;
     var selectQuery = new esri.tasks.Query();
 
 
     dojo.connect(map, "onClick", function(evt) {
 		     selectQuery.geometry = evt.mapPoint;
-		     ownershipFieldsFL.selectFeatures(selectQuery, esri.layers.FeatureLayer.SELECTION_NEW, function(features) {
+		     ownershipFL.selectFeatures(selectQuery, esri.layers.FeatureLayer.SELECTION_NEW, function(features) {
 							  if (features.length > 0) {
 							      //store the current feature
 							      updateFeature = features[0];
@@ -120,7 +120,7 @@ function initSelectToolbar(results) {
     dojo.connect(map.infoWindow, "onHide", function() {
 		     ownershipFL.clearSelection();
 		 });
-    var layerInfos = [{'featureLayer':ownershipFieldsFL,
+    var layerInfos = [{'featureLayer':ownershipFL,
 		       'showAttachments':false,
 		       'isEditable': true,
 		       'fieldInfos': [
