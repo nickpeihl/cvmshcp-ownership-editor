@@ -144,7 +144,7 @@ function initSelectToolbar(results) {
     
     //add a save button next to the delete button
     var saveButton = new dijit.form.Button({label:"Save","class":"saveButton"});
-    dojo.place(saveButton.domNode, attInspector.deleteBtn.domNode, "after");
+    dojo.place(saveButton.domNode, "after");
 
     dojo.connect(saveButton,"onClick",function(){
 		     updateFeature.getLayer().applyEdits(null, [updateFeature],null);
@@ -160,13 +160,9 @@ function initSelectToolbar(results) {
 		 console.log("Next " + updateFeature.attributes.objectid);
 		 });
 
-    dojo.connect(attInspector, "onDelete", function(feature){
-		 feature.getLayer().applyEdits(null,null,[feature]);
-		 map.infoWindow.hide();
-		 });
 
     map.infoWindow.setContent(attInspector.domNode);
-    map.infoWindow.resize(325,210);
+    map.infoWindow.resize(450,300);
     
     
 }
