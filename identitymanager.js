@@ -35,9 +35,8 @@ function init() {
 
 
     var ownershipFL = new esri.layers.FeatureLayer("https://cvag01.mojavedata.gov/ArcGIS/rest/services/admin/Ownership_Editor/FeatureServer/0", {
-						       mode: esri.layers.FeatureLayer.MODE_SELECTION,
-						       outFields: ["APN","OWNER","CONS_STATUS","POST_MOU","ACQ_DATE","CREDIT_STATE","CREDIT_PERMITTEE","CREDIT_COMP"]
-						   });
+    mode: esri.layers.FeatureLayer.MODE_SELECTION,
+    outFields: ["APN","OWNER","CONS_STATUS","POST_MOU","ACQ_DATE","CREDIT_STATE","CREDIT_PERMITTEE","CREDIT_COMP"]    });
 
     var selectionSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_NULL, new esri.symbol.SimpleLineSymbol("dashdot", new dojo.Color("yellow"), 2),null);
     ownershipFL.setSelectionSymbol(selectionSymbol);
@@ -47,6 +46,7 @@ function init() {
 		 });
 
     map.addLayers([ownershipFL]);
+
     function loadCredentials() {
 	var idJson, idObject;
 
@@ -105,15 +105,15 @@ function initSelectToolbar(results) {
     dojo.connect(map, "onClick", function(evt) {
 		     selectQuery.geometry = evt.mapPoint;
 		     ownershipFL.selectFeatures(selectQuery, esri.layers.FeatureLayer.SELECTION_NEW, function(features) {
-							  if (features.length > 0) {
-							      //store the current feature
-							      updateFeature = features[0];
-							      map.infoWindow.setTitle(features[0].getLayer().name);
-							      map.infoWindow.show(evt.screenPoint,map.getInfoWindowAnchor(evt.screenPoint));
-							  } else {
-							      map.infoWindow.hide();
-							  }
-						      });
+						    if (features.length > 0) {
+							//store the current feature
+							updateFeature = features[0];
+							map.infoWindow.setTitle(features[0].getLayer().name);
+							map.infoWindow.show(evt.screenPoint,map.getInfoWindowAnchor(evt.screenPoint));
+						    } else {
+							map.infoWindow.hide();
+						    }
+						});
 
 		 });
 
@@ -145,9 +145,31 @@ function initSelectToolbar(results) {
     //add a save button next to the delete button
     var saveButton = new dijit.form.Button({label:"Save","class":"saveButton"});
     dojo.place(saveButton.domNode, attInspector.deleteBtn.domNode, "after");
+
+    dojo.connect(saveButton,"onClick",function(){
+		     updateFeature.getLayer().applyEdits(null, [updateFeature],null);
+		 });
+
+    dojo.connect(attInspector, "onAttributeChange", function(feature,fieldName,newFieldValue){
+		     //store the updates to apply when the save button is clicked
+		     updateFeature.attributes[fieldName] = newFieldValue;
+		 });
+    
+    dojo.connect(attInspector, "onNext", function(feature){
+		 updateFeature = feature;
+		 console.log("Next " + updateFeature.attributes.objectid);
+		 });
+
+    dojo.connect(attInspector, "onDelete", function(feature){
+		 feature.getLayer().applyEdits(null,null,[feature]);
+		 map.infoWindow.hide();
+		 });
+
+    map.infoWindow.setContent(attInspector.domNode);
+    map.infoWindow.resize(325,210);
     
     
 }
 
 
-dojo.ready(init);
+dojo.addOnLoad(init);
