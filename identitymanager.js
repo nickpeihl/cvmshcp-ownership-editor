@@ -131,7 +131,7 @@ function initSelectToolbar(results) {
 			   {'fieldName': 'ACQ_DATE', 'isEditable':true, 'tooltip': 'Date Parcel was Acquired for Conservation', 'label':'Acquisition Date:'},
 			   {'fieldName': 'CREDIT_STATE', 'isEditable':true, 'tooltip': 'Federal/State Funding (Percent)', 'label':'Federal/State Funding (Percent):'},
 			   {'fieldName': 'CREDIT_PERMITTEE', 'isEditable':true, 'tooltip': 'Local Permittee Funding (Percent)', 'label':'Local Permittee Funding (Percent):'},
-			   {'fieldName': 'CREDIT_COMP', 'isEditable':true, 'tooltip': 'Complementary Funding (Percent)', 'label':'Complementary Funding (Percent):'},
+			   {'fieldName': 'CREDIT_COMP', 'isEditable':true, 'tooltip': 'Complementary Funding (Percent)', 'label':'Complementary Funding (Percent):'}
 		       ]}];
 
     
