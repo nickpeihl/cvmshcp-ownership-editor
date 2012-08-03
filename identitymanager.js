@@ -43,7 +43,7 @@ function init() {
 						       mode: esri.layers.FeatureLayer.MODE_SELECTION,
 						       outFields: ["APN","OWNER","CONS_STATUS","POST_MOU","ACQ_DATE","CREDIT_STATE","CREDIT_PERMITTEE","CREDIT_COMP"]    });
 
-    find = new esri.tasks.FindTask("https://cvag01.mojavedata.gov/ArcGIS/rest/services/admin/Ownership_Editor/FeatureServer");
+    find = new esri.tasks.FindTask("https://cvag01.mojavedata.gov/ArcGIS/rest/services/admin/Ownership_Editor/MapServer");
     params = new esri.tasks.FindParameters();
     params.returnGeometry = true;
     params.layerIds = [0];
