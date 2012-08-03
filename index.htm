@@ -53,7 +53,7 @@
    <div dojotype="dijit.layout.ContentPane" region="left" style="width:200px;">
      <h4>Find Parcel by Assessor's Parcel Number:</h4>
       <input type="text" id="searchText" value="660110005" />
-      <input type="button" value="Find" onclick="execute(dojo.byId('searchText').value);" />
+      <input type="button" value="Find" onclick="doFind(dojo.byId('searchText').value);" />
      <table dojotype="dojox.grid.DataGrid" jsid="grid" id="grid">
        <thead>
 	 <tr>
