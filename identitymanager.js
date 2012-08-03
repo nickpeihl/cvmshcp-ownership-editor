@@ -4,8 +4,13 @@ dojo.require("esri.map");
 dojo.require("esri.layers.FeatureLayer");
 dojo.require("esri.dijit.AttributeInspector-all");
 dojo.require("esri.IdentityManager");
+dojo.require("esri.tasks.find");
+dojo.require("dojox.grid.DataGrid");
+dojo.require("dojo.data.ItemFileReadStore");
 
 var map, cred = "esri_jsapi_id_manager_data"; // cookie/local storage name
+
+var find, params, grid;
 
 
 function init() {
@@ -35,8 +40,14 @@ function init() {
 
 
     var ownershipFL = new esri.layers.FeatureLayer("https://cvag01.mojavedata.gov/ArcGIS/rest/services/admin/Ownership_Editor/FeatureServer/0", {
-    mode: esri.layers.FeatureLayer.MODE_SELECTION,
-    outFields: ["APN","OWNER","CONS_STATUS","POST_MOU","ACQ_DATE","CREDIT_STATE","CREDIT_PERMITTEE","CREDIT_COMP"]    });
+						       mode: esri.layers.FeatureLayer.MODE_SELECTION,
+						       outFields: ["APN","OWNER","CONS_STATUS","POST_MOU","ACQ_DATE","CREDIT_STATE","CREDIT_PERMITTEE","CREDIT_COMP"]    });
+
+    find = new esri.tasks.FindTask("https://cvag01.mojavedata.gov/ArcGIS/rest/services/admin/Ownership_Editor/FeatureServer");
+    params = new esri.tasks.FindParameters();
+    params.returnGeometry = true;
+    params.layerIds = [0];
+    params.searchFields = ["APN"];
 
     var selectionSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_NULL, new esri.symbol.SimpleLineSymbol("dashdot", new dojo.Color("yellow"), 2),null);
     ownershipFL.setSelectionSymbol(selectionSymbol);
@@ -156,8 +167,8 @@ function initSelectToolbar(results) {
 		 });
     
     dojo.connect(attInspector, "onNext", function(feature){
-		 updateFeature = feature;
-		 console.log("Next " + updateFeature.attributes.objectid);
+		     updateFeature = feature;
+		     console.log("Next " + updateFeature.attributes.objectid);
 		 });
 
 
@@ -167,5 +178,58 @@ function initSelectToolbar(results) {
     
 }
 
+function doFind(){
+    params.searchText = dojo.byId("searchText").value;
+    find.execute(params, showResults);
+}
+
+function showResults(results) {
+    //symbology for graphics
+    var markerSymbol = new esri.symbol.SimpleMarkerSymbol(esri.symbol.SimpleMarkerSymbol.STYLE_SQUARE, 10, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_SOLID, new dojo.Color([255, 0, 0]), 1), new dojo.Color([0, 255, 0, 0.25]));
+    var lineSymbol = new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_DASH, new dojo.Color([255, 0, 0]), 1);
+    var polygonSymbol = new esri.symbol.SimpleFillSymbol(esri.symbol.SimpleFillSymbol.STYLE_NONE, new esri.symbol.SimpleLineSymbol(esri.symbol.SimpleLineSymbol.STYLE_DASHDOT, new dojo.Color(["yellow"]), 2), null);
+
+    //find results return an array of findResult.
+    map.graphics.clear();
+    var dataForGrid = [];
+    //Build an array of attribute information and add each found graphic to the map
+    dojo.forEach(results, function(result) {
+		     var graphic = result.feature;
+		     dataForGrid.push([result.value], "Zoom to Parcel");
+		     switch (graphic.geometry.type) {
+		     case "point":
+			 graphic.setSymbol(markerSymbol);
+			 break;
+		     case "polyline":
+			 graphic.setSymbol(lineSymbol);
+			 break;
+		     case "polygon":
+			 graphic.setSymbol(polygonSymbol);
+			 break;
+		     }
+		     map.graphics.add(graphic);
+		 });
+    var data = {
+        items: dataForGrid
+    };
+    var store = new dojo.data.ItemFileReadStore({
+						    data: data
+						});
+    grid.setStore(store);
+}
+
+function onRowClickHandler(evt){
+    var clickedApnId = grid.getItem(evt.rowIndex).OBJECTID;
+    var selectedApn;
+    
+    dojo.forEach(map.graphics.graphics, function(graphic){
+		 if((graphic.attributes) && graphic.attributes.OBJECTID === clickedApnId){
+		     selectedApn = graphic;
+		     return;
+		 }
+		 });
+    var apnExtent = selectedApn.geometry.getExtent();
+    map.setExtent(apnExtent);
+}
 
 dojo.addOnLoad(init);
