@@ -195,7 +195,7 @@ function showResults(results) {
     //Build an array of attribute information and add each found graphic to the map
     dojo.forEach(results, function(result) {
 		     var graphic = result.feature;
-		     dataForGrid.push([result.value], "Zoom to Parcel");
+		     dataForGrid.push([result.value]);
 		     switch (graphic.geometry.type) {
 		     case "point":
 			 graphic.setSymbol(markerSymbol);
