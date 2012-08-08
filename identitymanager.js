@@ -10,7 +10,7 @@ dojo.require("dojo.data.ItemFileReadStore");
 
 var map, cred = "esri_jsapi_id_manager_data"; // cookie/local storage name
 
-var find, params, grid;
+var find, params;
 
 
 function init() {
@@ -213,7 +213,7 @@ function showResults(results) {
     var store = new dojo.data.ItemFileReadStore({
 						    data: data
 						});
-    grid = dijit.byId('grid');
+    var grid = dijit.byId('grid');
     grid.setStore(store);
 }
 
