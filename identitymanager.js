@@ -221,6 +221,7 @@ function showResults(results) {
     var store = new dojo.data.ItemFileReadStore({
 						    data: data
 						});
+    grid = dijit.byId('grid');
     grid.setStore(store);
 }
 
