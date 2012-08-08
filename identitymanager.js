@@ -133,6 +133,7 @@ function initSelectToolbar(results) {
 		 });
     var layerInfos = [{'featureLayer':ownershipFL,
 		       'showAttachments':false,
+		       'showDeleteButton': false,
 		       'isEditable': true,
 		       'fieldInfos': [
 			   {'fieldName': 'APN', 'isEditable':false, 'label':'APN:'},
@@ -155,7 +156,7 @@ function initSelectToolbar(results) {
     
     //add a save button next to the delete button
     var saveButton = new dijit.form.Button({label:"Save","class":"saveButton"});
-    dojo.place(saveButton.domNode, "after");
+    dojo.place(saveButton.domNode, attInspector.deleteBtn.domNode, "after");
 
     dojo.connect(saveButton,"onClick",function(){
 		     updateFeature.getLayer().applyEdits(null, [updateFeature],null);
@@ -170,6 +171,11 @@ function initSelectToolbar(results) {
 		     updateFeature = feature;
 		     console.log("Next " + updateFeature.attributes.objectid);
 		 });
+
+    dojo.connect(attInspector, "onDelete", function(feature){
+		 feature.getLayer().applyEdits(null,null,[feature]);
+		 map.infoWindow.hide();
+		});
 
 
     map.infoWindow.setContent(attInspector.domNode);
