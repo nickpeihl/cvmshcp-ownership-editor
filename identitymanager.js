@@ -222,7 +222,7 @@ function showResults(results) {
 	label: "OBJECTID",
         items: dataForGrid
     };
-    var store = new dojo.data.ItemFileReadStore({
+    store = new dojo.data.ItemFileReadStore({
 						    data: data
 						});
     var grid = dijit.byId('grid');
