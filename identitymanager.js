@@ -20,6 +20,8 @@ function init() {
     // look for credentials in local storage
     loadCredentials();
 
+    dojo.connect(grid, "onRowClick", onRowClickHandler);
+
     var startExtent = new esri.geometry.Extent(-116.7055,33.9913,-115.7981,33.5033, new esri.SpatialReference({wkid:4326}));
 
     map = new esri.Map("mapCanvas",{
