@@ -10,8 +10,8 @@ dojo.require("dojo.data.ItemFileReadStore");
 
 var map, cred = "esri_jsapi_id_manager_data"; // cookie/local storage name
 
-var find, params;
-
+var find, params, startExtent;
+var grid, store;
 
 function init() {
     esri.config.defaults.io.proxyUrl = "https://cvag01.mojavedata.gov/proxy_net/proxy.ashx";
