@@ -216,6 +216,8 @@ function showResults(results) {
 		     map.graphics.add(graphic);
 		 });
     var data = {
+	identifier: "OBJECTID",
+	label: "OBJECTID",
         items: dataForGrid
     };
     var store = new dojo.data.ItemFileReadStore({
