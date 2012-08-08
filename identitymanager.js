@@ -199,26 +199,16 @@ function showResults(results) {
     map.graphics.clear();
     var dataForGrid = [];
     //Build an array of attribute information and add each found graphic to the map
-    dojo.forEach(results, function(result) {
-		     var graphic = result.feature;
-		     dataForGrid.push([result.value]);
-		     switch (graphic.geometry.type) {
-		     case "point":
-			 graphic.setSymbol(markerSymbol);
-			 break;
-		     case "polyline":
-			 graphic.setSymbol(lineSymbol);
-			 break;
-		     case "polygon":
-			 graphic.setSymbol(polygonSymbol);
-			 break;
-		     }
-		     map.graphics.add(graphic);
-		 });
+    var items = dojo.map(results, function(result){
+			     var graphic = result.feature;
+			     graphic.setSymbol(polygonSymbol);
+			     map.graphics.add(graphic);
+			     return result.feature.attributes;
+			 });
     var data = {
 	identifier: "OBJECTID",
 	label: "OBJECTID",
-        items: dataForGrid
+        items: items
     };
     var store = new dojo.data.ItemFileReadStore({
 						    data: data
