@@ -203,7 +203,7 @@ function showResults(results) {
     //Build an array of attribute information and add each found graphic to the map
     dojo.forEach(results, function(result) {
 		     var graphic = result.feature;
-		     dataForGrid.push([result.value]);
+		     dataForGrid.push([result.feature.attributes]);
 		     switch (graphic.geometry.type) {
 		     case "point":
 			 graphic.setSymbol(markerSymbol);
@@ -216,7 +216,6 @@ function showResults(results) {
 			 break;
 		     }
 		     map.graphics.add(graphic);
-		     return result.feature.attributes;
 		 });
     var data = {
 	identifier: "OBJECTID",
