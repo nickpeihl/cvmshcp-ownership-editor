@@ -5,12 +5,13 @@ dojo.require("esri.layers.FeatureLayer");
 dojo.require("esri.dijit.AttributeInspector-all");
 dojo.require("esri.IdentityManager");
 dojo.require("esri.tasks.find");
+dojo.require("esri.geometry");
 dojo.require("dojox.grid.DataGrid");
 dojo.require("dojo.data.ItemFileReadStore");
 
 var map, cred = "esri_jsapi_id_manager_data"; // cookie/local storage name
 
-var find, params, grid;
+var find, params, grid, store;
 
 
 function init() {
@@ -22,7 +23,7 @@ function init() {
 
     dojo.connect(grid, "onRowClick", onRowClickHandler);
 
-    var startExtent = new esri.geometry.Extent(-116.7055,33.9913,-115.7981,33.5033, new esri.SpatialReference({wkid:4326}));
+    var startExtent = new esri.geometry.Extent(-116.7055,33.5033,-115.7981,33.9913, new esri.SpatialReference({wkid:4326}));
 
     map = new esri.Map("mapCanvas",{
 			   extent:esri.geometry.geographicToWebMercator(startExtent)
@@ -181,7 +182,7 @@ function initSelectToolbar(results) {
 
 
     map.infoWindow.setContent(attInspector.domNode);
-    map.infoWindow.resize(450,300);
+    map.infoWindow.resize(400,250);
     
     
 }
@@ -199,33 +200,25 @@ function showResults(results) {
 
     //find results return an array of findResult.
     map.graphics.clear();
-    var dataForGrid = [];
-    //Build an array of attribute information and add each found graphic to the map
-    dojo.forEach(results, function(result) {
-		     var graphic = result.feature;
-		     dataForGrid.push([result.feature.attributes]);
-		     switch (graphic.geometry.type) {
-		     case "point":
-			 graphic.setSymbol(markerSymbol);
-			 break;
-		     case "polyline":
-			 graphic.setSymbol(lineSymbol);
-			 break;
-		     case "polygon":
+    
+    var items = dojo.map(results, function(result) {
+			 var graphic = result.feature;
 			 graphic.setSymbol(polygonSymbol);
-			 break;
-		     }
-		     map.graphics.add(graphic);
-		 });
+			 map.graphics.add(graphic);
+			 return result.feature.attributes;
+			 });
+
     var data = {
 	identifier: "OBJECTID",
-        items: dataForGrid
+	label: "APN",
+        items: items
     };
-    var store = new dojo.data.ItemFileReadStore({
+    store = new dojo.data.ItemFileReadStore({
 						    data: data
 						});
     grid = dijit.byId('grid');
     grid.setStore(store);
+    map.setExtent()
 }
 
 function onRowClickHandler(evt){

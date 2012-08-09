@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=7" />
-  <title>Persisting Identity Manager Info</title>
+  <title>CVMSHCP Land Ownership Web Editor</title>
   <link rel="stylesheet" href="https://servicesbeta.esri.com/jsapi/arcgis/3.0/js/dojo/dijit/themes/tundra/tundra.css">
   <link rel="stylesheet" href="https://servicesbeta.esri.com/jsapi/arcgis/3.0/js/dojo/dojox/grid/resources/Grid.css">
   <link rel="stylesheet" href="https://servicesbeta.esri.com/jsapi/arcgis/3.0/js/esri/dijit/css/Popup.css">
@@ -29,6 +29,11 @@
         padding-left:45px;
          margin:0px;width:16px; height:16px;
        }
+
+      #grid{
+        width: 250px;
+        height: 400px;
+      }
   </style>
 
   <script type="text/javascript">var dojoConfig = { parseOnLoad: true };</script>
@@ -42,7 +47,7 @@
        data-dojo-props="design:'headline',gutters:false"
        style="position:relative;width:100%;height:100%;">
     <div class="details" dojotype="dijit.layout.BorderContainer" region="top" style="height:60px;">
-      <h1>CVMSHCP Land Ownership Editor</h1>
+      <h1>CVMSHCP Land Ownership Web Editor</h1>
     </div>
    <div id="mapCanvas"
         data-dojo-type="dijit.layout.ContentPane"
@@ -50,17 +55,18 @@
 
    </div>
 
-   <div dojotype="dijit.layout.ContentPane" region="left" style="width:200px;">
+   <div dojotype="dijit.layout.ContentPane" region="left" style="width:300px;">
      <h4>Find Parcel by Assessor's Parcel Number:</h4>
       <input type="text" id="searchText" value="660110005" />
       <input type="button" value="Find" onclick="doFind(dojo.byId('searchText').value);" />
-     <table dojotype="dojox.grid.DataGrid" jsid="grid" id="grid">
+     <table dojotype="dojox.grid.DataGrid" data-dojo-grid="grid" jsid="grid" id="grid" data-dojo-props="rowsPerPage:'5', rowSelector:'20px', autoWidth:'True'">
        <thead>
 	 <tr>
-	   <th field="0">
+	   <th field="Assessor's Parcel Number">
 	     APN
 	   </th>
-	   <th field="1">
+	   <th field="Owner">
+	     Owner
 	   </th>
 	 </tr>
        </thead>
